@@ -6,8 +6,20 @@ import (
 	"log"
 )
 
+func testUnmashallOneMagasin() {
+	magasinJSON := `{"idt":3,"nom":"Toulouse"}`
+	fmt.Printf("testMarshallOneMagasin %s\n", magasinJSON)
+	magasin := new(Magasin)
+	errUnmarshal := json.Unmarshal([]byte(magasinJSON), magasin)
+	if errUnmarshal != nil {
+		log.Fatal(errUnmarshal)
+	} else {
+		fmt.Printf("testUnmashallOneMagasin//Unmarshal %+v\n", magasin)
+	}
+}
+
 func testUnmarshallArrayOfMagasins() {
-	magasinsJSON := "[{\"idt\":3,\"nom\":\"Toulouse\"},{\"idt\":2,\"nom\":\"Gourdon\"}]"
+	magasinsJSON := `[{"idt":3,"nom":"Toulouse"},{"idt":2,"nom":"Gourdon"}]`
 	var magasins []Magasin
 	errUnmarshal := json.Unmarshal([]byte(magasinsJSON), &magasins)
 	if errUnmarshal != nil {
@@ -19,20 +31,8 @@ func testUnmarshallArrayOfMagasins() {
 	}
 }
 
-func testUnmashallOneMagasin() {
-	magasinJSON := "{\"idt\":3,\"nom\":\"Toulouse\"}"
-	fmt.Printf("testMarshallOneMagasin %s\n", magasinJSON)
-	magasin := new(Magasin)
-	errUnmarshal := json.Unmarshal([]byte(magasinJSON), magasin)
-	if errUnmarshal != nil {
-		log.Fatal(errUnmarshal)
-	} else {
-		fmt.Printf("testUnmashallOneMagasin//Unmarshal %+v\n", magasin)
-	}
-}
-
 func testUnmarshallComposite() {
-	unknowJSON := "{\"idt\":1,\"nom\":\"Toulouse\",\"rayons\":[{\"idt\":1,\"nom\":\"Eaux\"},{\"idt\":2,\"nom\":\"Viandes\"}]}"
+	unknowJSON := `{"idt":1,"nom":"Toulouse","rayons":[{"idt":1,"nom":"Eaux"},{"idt":2,"nom":"Viandes"}]}`
 	var parsed map[string]interface{}
 	errUnmarshal := json.Unmarshal([]byte(unknowJSON), &parsed)
 	if errUnmarshal != nil {
