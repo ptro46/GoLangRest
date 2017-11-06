@@ -1,30 +1,33 @@
 package main
+
 import "net/http"
 import (
-	"github.com/fromkeith/gorest" // go get github.com/fromkeith/gorest
 	"fmt"
+	"github.com/fromkeith/gorest" // go get github.com/fromkeith/gorest
 )
 
-func main(){
+var DatabaseSingleton *Database
 
-	magasinService := new(MagasinService)
-	magasinService.init()
-	gorest.RegisterService(magasinService)
+func main() {
 
-	rayonService := new(RayonService)
-	rayonService.init()
-	gorest.RegisterService(rayonService)
+	db, err := connectDB()
+	if err == nil {
+		DatabaseSingleton = &Database{db: db}
 
-	produitService := new(ProduitService)
-	produitService.init()
-	gorest.RegisterService(produitService)	
+		magasinService := new(MagasinService)
+		magasinService.init()
+		gorest.RegisterService(magasinService)
 
-	http.Handle("/",gorest.Handle())
-	http.ListenAndServe(":8080",nil)
-	fmt.Print("Finished")
+		rayonService := new(RayonService)
+		rayonService.init()
+		gorest.RegisterService(rayonService)
+
+		produitService := new(ProduitService)
+		produitService.init()
+		gorest.RegisterService(produitService)
+
+		http.Handle("/", gorest.Handle())
+		http.ListenAndServe(":8080", nil)
+		fmt.Print("Finished")
+	}
 }
-
-
-
-
-
